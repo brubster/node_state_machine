@@ -7,6 +7,10 @@ extends Node
 ## Allows for states to tell the machine when/which state to change to.
 var machine: FiniteStateMachine
 
+## The Node being controlled by this FSM.
+## Allows for states to directly access its properties and methods.
+var actor: Node
+
 
 func enter() -> void:
 	pass

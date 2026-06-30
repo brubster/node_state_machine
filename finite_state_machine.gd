@@ -6,6 +6,8 @@ extends Node
 signal state_changed
 
 
+## The Node being controlled by this FSM. By default it is the FSM's parent.
+@export var actor: Node
 @export var initial_state: BaseState
 
 
@@ -17,10 +19,17 @@ func _ready() -> void:
 	if get_child_count() == 0:
 		queue_free()
 		return
+
+	if actor == null:
+		actor = get_parent()
 	
 	for child in get_children() as Array[BaseState]:
 		_states[child.name] = child
 		child.machine = self
+		child.actor = actor
+	
+	if not actor.is_node_ready():
+		await actor.ready
 	
 	if initial_state:
 		change_state(initial_state.name)
